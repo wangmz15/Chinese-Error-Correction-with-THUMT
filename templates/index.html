@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>中文语法改错系统</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/main.css') }}" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<header id="header">
+				<a class="logo" href="index.html">中文语法改错</a>
+				<nav>
+					<a href="#menu">目录</a>
+				</nav>
+			</header>
+
+		<!-- Nav -->
+			<nav id="menu">
+				<ul class="links">
+					<li><a href="index.html">语法改错首页</a></li>
+				</ul>
+			</nav>
+
+
+		<!-- Testimonials -->
+			<section class="wrapper">
+				<div style="text-align:center; margin:0 auto;">
+					<div style= "display:inline-block;position:relative;font-size:36px; margin-right: 1%">
+						<textarea cols="70" rows="5" id="inputtextarea"  onfocus="if(value=='请输入待改错的句子'){value=''}"
+        onblur="if (value ==''){value='请输入待改错的句子'}">请输入待改错的句子</textarea>
+					</div>
+					<div style= "display:inline-block;position:relative;font-size:36px; margin-left: 1%">
+						<textarea cols="70" rows="5" id="result" readonly ></textarea>
+					</div>
+
+					<!--<textarea cols="40" rows="3" id="result" readonly style= "background:transparent;border-style:none; font-size:36px"></textarea>-->
+					<div style="text-align:center; margin-top: 5%">
+						<button style="margin-right: 1%" id="segment_button" onclick="submit(document.getElementById('inputtextarea').value)">改错</button>
+						<button style="margin-left: 1%" id="clear">清空</button></div>
+				</div>
+
+
+
+
+			</section>
+		<script type="text/javascript">
+		function submit(text){
+			if (text != '请输入待改错的句子')
+			{
+				document.getElementById('result').innerHTML = "修改中"
+				console.log(text)
+				console.log(encodeURIComponent(text))
+				console.log(encodeURIComponent(encodeURIComponent(text)))
+				$.post('http://166.111.5.187:3001'+'/translateapi/'+encodeURIComponent(encodeURIComponent(text)),
+					function(json_res){
+					var json_data = JSON.parse(json_res)
+						document.getElementById('result').innerHTML = json_data.trg
+					})
+			}
+
+		}
+		var btn = document.getElementById('clear');
+		btn.onclick=function(){
+
+		  document.getElementById('result').innerHTML = "";
+		  document.getElementById('inputtextarea').value = "请输入待改错的句子";
+
+		}
+
+     </script>
+		<!-- Scripts -->
+			<script src="static/js/jquery.min.js"></script>
+			<script src="static/js/browser.min.js"></script>
+			<script src="static/js/breakpoints.min.js"></script>
+			<script src="static/js/util.js"></script>
+			<script src="static/js/main.js"></script>
+
+
+	</body>
+</html>
